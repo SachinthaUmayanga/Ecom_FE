@@ -1,31 +1,36 @@
 import React, { useEffect, useState } from "react";
-import { getProducts } from "../services/api";
+import api from "../services/api";
 
 const Home = () => {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
         const fetchProducts = async () => {
-            const data = await getProducts();
-            setProducts(data);
+            try {
+                const response = await api.get('/product');
+                setProducts(response.data);
+            }
+            catch (error) {
+                console.error('Error fetching products:', error);
+            }
         };
         fetchProducts();
     }, []);
 
     return (
-        <div>
-            <h2 className="text-2xl font-bold">Our Products</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+        <div className="container mx-auto p-4">
+            <h1 className="text-2xl font-bold mb-4">Products</h1>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {products.map((product) => (
                     <div key={product.id} className="border p-4 rounded">
-                        <h3 className="font-bold">{product.name}</h3>
+                        <h2 className="text-xl font-bold">{product.name}</h2>
                         <p>{product.description}</p>
-                        <p className="text-blue-600">${product.price}</p>
+                        <p className="text-blue-600 font-bold">Price: LKR.{product.price}</p>
                     </div>
                 ))}
             </div>
         </div>
     );
-};
+}
 
 export default Home;

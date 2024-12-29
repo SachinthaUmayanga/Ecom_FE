@@ -1,17 +1,19 @@
-import React from "react";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-const Navbar = () => {
+function Navbar() {
     return (
-        <nav className="bg-blue-600 text-white p-4">
+        <nav className="bg-blue-600 p-4 text-white">
             <div className="container mx-auto flex justify-between items-center">
-                <h1 className="text-lg font-bold">M-Shop</h1>
+                <Link to="/" className="text-xl font-bold">E-Shop</Link>
                 <div>
-                    <a href="/login" className="mx-2 hover:underline">Login</a>
-                    <a href="/cart" className="mx-2 hover:underline">Cart</a>
+                    <Link to="/" className="mx-2">Home</Link>
+                    <Link to="/login" className="mx-2">Login</Link>
+                    <Link to="/register" className="mx-2">Register</Link>
                 </div>
             </div>
         </nav>
     );
-};
+}
 
 export default Navbar;
