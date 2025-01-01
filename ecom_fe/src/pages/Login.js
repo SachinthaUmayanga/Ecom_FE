@@ -3,8 +3,8 @@ import api from '../services/api';
 
 function Login() {
     const [formData, setFormData] = useState({
-        Email: '',
-        Password: '',
+        email: '',
+        password: '',
     });
 
     const [message, setMessage] = useState('');
@@ -21,21 +21,21 @@ function Login() {
 
         try {
             const response = await api.post('/Auth/login', formData);
-            setMessage(response.data.Message); // Success message
-            console.log('User Data:', response.data.User); // Log returned user data
+            console.log('Login response:', response.data);  // Log the full response to see the structure
+            setMessage(response.data.Message); // Backend sends a success message
+            console.log('User:', response.data.User); // User data can be stored if needed
         } catch (error) {
-            // Handle backend error object
+            console.log('Error object:', error);
+
             if (error.response && error.response.data) {
-                const backendError = error.response.data;
-                if (typeof backendError === 'string') {
-                    setError(backendError); // Plain string message
-                } else if (backendError.Message) {
-                    setError(backendError.Message); // Specific message property
-                } else {
-                    setError('An unknown error occurred.');
-                }
+                setError(
+                    error.response.data.Message || // Look for "Message" field
+                    'Login failed. Please check your credentials.' // Fallback message
+                );
+            } else if (error.request) {
+                setError('Unable to connect to the server. Please try again later.');
             } else {
-                setError('Something went wrong. Please try again later.');
+                setError('An unexpected error occurred.');
             }
         }
     };
@@ -67,10 +67,10 @@ function Login() {
                         Email
                     </label>
                     <input
-                        id="Email"
-                        name="Email"
+                        id="email"
+                        name="email"
                         type="email"
-                        value={formData.Email}
+                        value={formData.email}
                         onChange={handleChange}
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         required
@@ -85,10 +85,10 @@ function Login() {
                         Password
                     </label>
                     <input
-                        id="Password"
-                        name="Password"
+                        id="password"
+                        name="password"
                         type="password"
-                        value={formData.Password}
+                        value={formData.password}
                         onChange={handleChange}
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         required
